@@ -65,7 +65,7 @@ Diagram of the flow of our solution:
 
 ### Solution demo video
 
-[![Watch the video](https://raw.githubusercontent.com/Liquid-Prep/Liquid-Prep/main/images/readme/IBM-interview-video-image.png)](https://youtu.be/vOgCOoy_Bx0)
+[![Watch the video](https://youtu.be/HG0L4r0e8qE)
 
 ### Project development roadmap
 
@@ -124,7 +124,7 @@ In the future we plan for...
 
 ### Live Demo
 
-URL: https://youtu.be/HG0L4r0e8qE
+URL: https://hydroguard.onrender.com
 
 Demo Credentials -
  - For Society
