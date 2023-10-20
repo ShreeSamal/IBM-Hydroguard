@@ -65,7 +65,7 @@ Diagram of the flow of our solution:
 
 ### Solution demo video
 
-[![Watch the video](https://youtu.be/HG0L4r0e8qE)
+[Watch the video](https://youtu.be/HG0L4r0e8qE)
 
 ### Project development roadmap
 
