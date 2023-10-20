@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <title>{{title}}</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+
+    <!-- Favicons -->
+    <link href="/static/assets/img/favicon.png" rel="icon" />
+    <link
+      href="/static/assets/img/apple-touch-icon.png"
+      rel="apple-touch-icon"
+    />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+
+    <!-- Vendor CSS Files -->
+    <link
+      href="/static/assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="/static/assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="/static/assets/vendor/boxicons/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link href="/static/assets/vendor/quill/quill.snow.css" rel="stylesheet" />
+    <link
+      href="/static/assets/vendor/quill/quill.bubble.css"
+      rel="stylesheet"
+    />
+    <link
+      href="/static/assets/vendor/remixicon/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      href="/static/assets/vendor/simple-datatables/style.css"
+      rel="stylesheet"
+    />
+
+    <!-- Template Main CSS File -->
+    <link href="/static/assets/css/style.css" rel="stylesheet" />
+
+    <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Updated: Sep 18 2023 with Bootstrap v5.3.2
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  </head>
+
+  <body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+      <div class="d-flex align-items-center justify-content-between">
+        <i class="bi bi-list toggle-sidebar-btn m-4"></i>
+        <a href="index.html" class="logo d-flex align-items-center">
+          <img
+            src="/static/assets/img/cfrost-logo.png"
+            alt=""
+            style="border-radius: 50%"
+          />
+          <span class="d-none d-lg-block">AdminPanel</span>
+        </a>
+      </div>
+      <!-- End Logo -->
+
+      <div class="search-bar" style="margin-left: auto">
+        <form
+          class="search-form d-flex align-items-center"
+          method="POST"
+          action="#"
+        >
+          <input
+            type="text"
+            name="query"
+            placeholder="Search"
+            title="Enter search keyword"
+          />
+          <button type="submit" title="Search">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+      </div>
+      <!-- End Search Bar -->
+    </header>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+      <ul class="sidebar-nav" id="sidebar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/complaints">
+            <i class="bi bi-grid"></i>
+            <span>Complaints</span>
+          </a>
+        </li>
+        <!-- End Dashboard Nav -->
+      </ul>
+    </aside>
+    <!-- End Sidebar-->
+
+    <main id="main" class="main">
+      <div class="pagetitle">
+        <h1>Dashboard</h1>
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Society</a></li>
+            <li class="breadcrumb-item active">{{society_id}}</li>
+          </ol>
+        </nav>
+      </div>
+      <!-- End Page Title -->
+
+      <section class="section dashboard">
+        <div class="row">
+          <!-- Left side columns -->
+          <div class="col-lg-8">
+            <div class="row">
+              <!-- Sales Card -->
+              <!-- End Sales Card -->
+
+              <!-- Revenue Card -->
+              <!-- End Revenue Card -->
+
+              <!-- Customers Card -->
+              <!-- End Customers Card -->
+
+              <!-- Reports -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"
+                      ><i class="bi bi-three-dots"></i
+                    ></a>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
+                    >
+                      <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="phDay"
+                          >Today</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="phWeek"
+                          >Last 7 Days</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="phMonth"
+                          >This Month</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="phYear"
+                          >This Year</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="card-body">
+                    <h5 class="card-title">PH <span>/Today</span></h5>
+
+                    <!-- Line Chart -->
+                    <div id="phChart"></div>
+
+                    <script>
+                      var phChart = null;
+                      const realtime_json = JSON.parse(
+                        `{{realtime_values | safe}}`
+                      );
+                      const phArray = realtime_json["ph_array"];
+                      const timestampArray = realtime_json["timestamps"];
+                      function updatePHChartDayData(societyId, valueType) {
+                        var newData = phArray;
+
+                        // Update the chart's data
+                        phChart.updateSeries([
+                          {
+                            data: newData,
+                          },
+                        ]);
+                      }
+
+                      function updatePHChartWeekData(societyId, valueType) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        console.log("updatePHChartWeekData");
+                        console.log("societyId", societyId);
+                        fetch(
+                          `http://localhost:5000/api/society/week/${societyId}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.phvalue.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+
+                            const phTimestamps = data.timestamps.map(
+                              (timestamp) => {
+                                const date = new Date(timestamp);
+                                const day = String(date.getDate()).padStart(
+                                  2,
+                                  "0"
+                                ); // Ensure two digits for day
+                                const month = String(
+                                  date.getMonth() + 1
+                                ).padStart(2, "0"); // Month is 0-based
+                                return `${day}/${month}`;
+                              }
+                            );
+                            // Update the chart's data
+                            phChart.updateSeries([
+                              {
+                                data: data.phvalue,
+                              },
+                            ]);
+
+                            phChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "datetime",
+                                  categories: ["13/10","14/10","15/10","16/10","17/10","18/10","19/10"],
+                                },
+                              })
+                              .catch((error) => {
+                                console.log("fncmdnaskc");
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updatePHChartMonthData(
+                        societyId,
+                        year,
+                        month,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        month = month ? month : "9";
+                        year = year ? year : "2023";
+                        console.log("updatePHMonthData");
+                        console.log("societyId", societyId);
+                        fetch(
+                          `http://localhost:5000/api/month/${societyId}/${year}/${month}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            phChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            phChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "text",
+                                  categories: data.weeks,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updatePHChartYearData(
+                        societyId,
+                        year,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/year/${societyId}/${year}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            phChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            phChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "number",
+                                  categories: data.months,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      var dayPh = document.getElementById("phDay");
+                      dayPh.addEventListener("click", updatePHChartDayData);
+
+                      var weekPh = document.getElementById("phWeek");
+                      weekPh.addEventListener("click", () =>
+                        updatePHChartWeekData("{{society_id}}", "phvalue")
+                      );
+
+                      var monthPh = document.getElementById("phMonth");
+                      monthPh.addEventListener("click", () =>
+                        updatePHChartMonthData(
+                          "{{society_id}}",
+                          2023,
+                          "9",
+                          "phvalue"
+                        )
+                      );
+
+                      var yearPh = document.getElementById("phYear");
+                      yearPh.addEventListener("click", () =>
+                        updatePHChartYearData("{{society_id}}", 2023, "phvalue")
+                      );
+
+                      document.addEventListener("DOMContentLoaded", () => {
+                        phChart = new ApexCharts(
+                          document.querySelector("#phChart"),
+                          {
+                            series: [
+                              {
+                                name: "PH",
+                                data: phArray,
+                              },
+                            ],
+                            chart: {
+                              height: 200,
+                              type: "area",
+                              toolbar: {
+                                show: true,
+                              },
+                            },
+                            markers: {
+                              size: 4,
+                            },
+                            colors: ["#4154f1"],
+                            fill: {
+                              type: "gradient",
+                              gradient: {
+                                shadeIntensity: 1,
+                                opacityFrom: 0.3,
+                                opacityTo: 0.4,
+                                stops: [0, 90, 100],
+                              },
+                            },
+                            dataLabels: {
+                              enabled: false,
+                            },
+                            stroke: {
+                              curve: "smooth",
+                              width: 2,
+                            },
+                            xaxis: {
+                              type: "string",
+                              categories: timestampArray,
+                            },
+                          }
+                        );
+
+                        phChart.render();
+                        console.log(phChart);
+                      });
+                    </script>
+                    <!-- End Line Chart -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="card">
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"
+                      ><i class="bi bi-three-dots"></i
+                    ></a>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
+                    >
+                      <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="turbidityDay"
+                          >Today</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="turbidityWeek"
+                          >Last 7 Days</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="turbidityMonth"
+                          >This Month</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="turbidityYear"
+                          >This Year</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="card-body">
+                    <h5 class="card-title">Turbidity <span>/Today</span></h5>
+
+                    <!-- Line Chart -->
+                    <div id="turbidityChart"></div>
+
+                    <script>
+                      var turbidityChart = null;
+                      var phChart = null;
+                      const turbidityArray = realtime_json["turbidity_array"];
+
+                      function updateTurbidityChartDayData() {
+                        var newData = turbidityArray;
+
+                        // Update the chart's data
+                        turbidityChart.updateSeries([
+                          {
+                            data: newData,
+                          },
+                        ]);
+                      }
+
+                      function updateTurbidityChartWeekData(
+                        societyId,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        fetch(
+                          `http://localhost:5000/api/society/week/${societyId}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.turbidityvalue.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            turbidityChart.updateSeries([
+                              {
+                                data: data.turbidityvalue,
+                              },
+                            ]);
+
+                            turbidityChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "datetime",
+                                  categories: data.timestamps,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateTurbidityChartMonthData(
+                        societyId,
+                        year,
+                        month,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        month = month ? month : "9";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/month/${societyId}/${year}/${month}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            turbidityChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            turbidityChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "text",
+                                  categories: data.weeks,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateTurbidityChartYearData(
+                        societyId,
+                        year,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/year/${societyId}/${year}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            turbidityChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            turbidityChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "number",
+                                  categories: data.months,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      var dayTurbidity =
+                        document.getElementById("turbidityDay");
+                      dayTurbidity.addEventListener(
+                        "click",
+                        updateTurbidityChartDayData
+                      );
+
+                      var weekTurbidity =
+                        document.getElementById("turbidityWeek");
+                      weekTurbidity.addEventListener("click", () =>
+                        updateTurbidityChartWeekData(
+                          "{{society_id}}",
+                          "turbidityvalue"
+                        )
+                      );
+
+                      var monthTurbidity =
+                        document.getElementById("turbidityMonth");
+                      monthTurbidity.addEventListener("click", () =>
+                        updateTurbidityChartMonthData(
+                          "{{society_id}}",
+                          2023,
+                          9,
+                          "turbidityvalue"
+                        )
+                      );
+
+                      var yearTurbidity =
+                        document.getElementById("turbidityYear");
+                      yearTurbidity.addEventListener("click", () =>
+                        updateTurbidityChartYearData(
+                          "{{society_id}}",
+                          2023,
+                          "turbidityvalue"
+                        )
+                      );
+
+                      document.addEventListener("DOMContentLoaded", () => {
+                        turbidityChart = new ApexCharts(
+                          document.querySelector("#turbidityChart"),
+                          {
+                            series: [
+                              {
+                                name: "Turbudity",
+                                data: turbidityArray,
+                              },
+                            ],
+                            chart: {
+                              height: 200,
+                              type: "area",
+                              toolbar: {
+                                show: true,
+                              },
+                            },
+                            markers: {
+                              size: 4,
+                            },
+                            colors: ["#2eca6a", "#ff771d"],
+                            fill: {
+                              type: "gradient",
+                              gradient: {
+                                shadeIntensity: 1,
+                                opacityFrom: 0.3,
+                                opacityTo: 0.4,
+                                stops: [0, 90, 100],
+                              },
+                            },
+                            dataLabels: {
+                              enabled: false,
+                            },
+                            stroke: {
+                              curve: "smooth",
+                              width: 2,
+                            },
+                            xaxis: {
+                              type: "string",
+                              categories: timestampArray,
+                            },
+                          }
+                        );
+
+                        turbidityChart.render();
+                      });
+                    </script>
+                    <!-- End Line Chart -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="card">
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"
+                      ><i class="bi bi-three-dots"></i
+                    ></a>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
+                    >
+                      <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="temperatureDay"
+                          >Today</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="temperatureWeek"
+                          >Last 7 Days</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="temperatureMonth"
+                          >This Month</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="temperatureYear"
+                          >This Year</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="card-body">
+                    <h5 class="card-title">Temperature <span>/Today</span></h5>
+
+                    <!-- Line Chart -->
+                    <div id="temperatureChart"></div>
+
+                    <script>
+                      var temperatureChart = null;
+                      const temperatureArray =
+                        realtime_json["temperature_array"];
+
+                      function updateTemperatureChartDayData() {
+                        var newData = temperatureArray;
+
+                        // Update the chart's data
+                        temperatureChart.updateSeries([
+                          {
+                            data: newData,
+                          },
+                        ]);
+                      }
+
+                      function updateTemperatureChartWeekData(
+                        societyId,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        fetch(
+                          `http://localhost:5000/api/society/week/${societyId}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.temperature.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            temperatureChart.updateSeries([
+                              {
+                                data: data.temperature,
+                              },
+                            ]);
+
+                            temperatureChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "datetime",
+                                  categories: data.timestamps,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateTemperatureChartMonthData(
+                        societyId,
+                        year,
+                        month,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        month = month ? month : "9";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/month/${societyId}/${year}/${month}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            temperatureChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            temperatureChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "text",
+                                  categories: data.weeks,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateTemperatureChartYearData(
+                        societyId,
+                        year,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/year/${societyId}/${year}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            temperatureChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            temperatureChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "number",
+                                  categories: data.months,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      var dayTemperature =
+                        document.getElementById("temperatureDay");
+                      dayTemperature.addEventListener(
+                        "click",
+                        updateTemperatureChartDayData
+                      );
+
+                      var weekTemperature =
+                        document.getElementById("temperatureWeek");
+                      weekTemperature.addEventListener("click", () =>
+                        updateTemperatureChartWeekData(
+                          "{{society_id}}",
+                          "temperature"
+                        )
+                      );
+
+                      var monthTemperature =
+                        document.getElementById("temperatureMonth");
+                      monthTemperature.addEventListener("click", () =>
+                        updateTemperatureChartMonthData(
+                          "{{society_id}}",
+                          2023,
+                          "9",
+                          "temperature"
+                        )
+                      );
+
+                      var yearTemperature =
+                        document.getElementById("temperatureYear");
+                      yearTemperature.addEventListener("click", () =>
+                        updateTemperatureChartYearData(
+                          "{{society_id}}",
+                          2023,
+                          "temperature"
+                        )
+                      );
+
+                      document.addEventListener("DOMContentLoaded", () => {
+                        temperatureChart = new ApexCharts(
+                          document.querySelector("#temperatureChart"),
+                          {
+                            series: [
+                              {
+                                name: "Temperature",
+                                data: temperatureArray,
+                              },
+                            ],
+                            chart: {
+                              height: 200,
+                              type: "area",
+                              toolbar: {
+                                show: true,
+                              },
+                            },
+                            markers: {
+                              size: 4,
+                            },
+                            colors: ["#2eca6a", "#ff771d"],
+                            fill: {
+                              type: "gradient",
+                              gradient: {
+                                shadeIntensity: 1,
+                                opacityFrom: 0.3,
+                                opacityTo: 0.4,
+                                stops: [0, 90, 100],
+                              },
+                            },
+                            dataLabels: {
+                              enabled: false,
+                            },
+                            stroke: {
+                              curve: "smooth",
+                              width: 2,
+                            },
+                            xaxis: {
+                              type: "string",
+                              categories: timestampArray,
+                            },
+                          }
+                        );
+
+                        temperatureChart.render();
+                      });
+                    </script>
+
+                    <!-- End Line Chart -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="card">
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"
+                      ><i class="bi bi-three-dots"></i
+                    ></a>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
+                    >
+                      <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="ecDay"
+                          >Today</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="ecWeek"
+                          >Last 7 Days</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="ecMonth"
+                          >This Month</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="ecYear"
+                          >This Year</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      Electrical Conductivity <span>/Today</span>
+                    </h5>
+
+                    <!-- Line Chart -->
+                    <div id="ecChart"></div>
+
+                    <script>
+                      var ecChart = null;
+                      const ecArray = realtime_json["ec_array"];
+
+                      function updateEcChartDayData() {
+                        var newData = ecArray;
+
+                        // Update the chart's data
+                        ecChart.updateSeries([
+                          {
+                            data: newData,
+                          },
+                        ]);
+                      }
+
+                      function updateEcChartWeekData(societyId, valueType) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        fetch(
+                          `http://localhost:5000/api/society/week/${societyId}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.ecvalue.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            ecChart.updateSeries([
+                              {
+                                data: data.ecvalue,
+                              },
+                            ]);
+
+                            ecChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "datetime",
+                                  categories: data.timestamps,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateEcChartMonthData(
+                        societyId,
+                        year,
+                        month,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        month = month ? month : "9";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/month/${societyId}/${year}/${month}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            ecChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            ecChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "text",
+                                  categories: data.weeks,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateEcChartYearData(
+                        societyId,
+                        year,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/year/${societyId}/${year}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            ecChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            ecChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "number",
+                                  categories: data.months,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      var dayEc = document.getElementById("ecDay");
+                      dayEc.addEventListener("click", updateEcChartDayData);
+
+                      var weekEc = document.getElementById("ecWeek");
+                      weekEc.addEventListener("click", () =>
+                        updateEcChartWeekData("{{society_id}}", "ecvalue")
+                      );
+
+                      var monthEc = document.getElementById("ecMonth");
+                      monthEc.addEventListener("click", () =>
+                        updateEcChartMonthData(
+                          "{{society_id}}",
+                          2023,
+                          "9",
+                          "ecvalue"
+                        )
+                      );
+
+                      var yearEc = document.getElementById("ecYear");
+                      yearEc.addEventListener("click", () =>
+                        updateEcChartYearData("{{society_id}}", 2023, "ecvalue")
+                      );
+
+                      document.addEventListener("DOMContentLoaded", () => {
+                        ecChart = new ApexCharts(
+                          document.querySelector("#ecChart"),
+                          {
+                            series: [
+                              {
+                                name: "Electrical Conductivity",
+                                data: ecArray,
+                              },
+                            ],
+                            chart: {
+                              height: 200,
+                              type: "area",
+                              toolbar: {
+                                show: true,
+                              },
+                            },
+                            markers: {
+                              size: 4,
+                            },
+                            colors: ["#2eca6a", "#ff771d"],
+                            fill: {
+                              type: "gradient",
+                              gradient: {
+                                shadeIntensity: 1,
+                                opacityFrom: 0.3,
+                                opacityTo: 0.4,
+                                stops: [0, 90, 100],
+                              },
+                            },
+                            dataLabels: {
+                              enabled: false,
+                            },
+                            stroke: {
+                              curve: "smooth",
+                              width: 2,
+                            },
+                            xaxis: {
+                              type: "string",
+                              categories: timestampArray,
+                            },
+                          }
+                        );
+
+                        ecChart.render();
+                      });
+                    </script>
+
+                    <!-- End Line Chart -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="card">
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"
+                      ><i class="bi bi-three-dots"></i
+                    ></a>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
+                    >
+                      <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="flowDay"
+                          >Today</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="flowWeek"
+                          >Last 7 Days</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="flowMonth"
+                          >This Month</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="flowYear"
+                          >This Year</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="card-body">
+                    <h5 class="card-title">Flow Rate <span>/Today</span></h5>
+
+                    <!-- Line Chart -->
+                    <div id="flowChart"></div>
+
+                    <script>
+                      var flowChart = null;
+                      const flowArray = realtime_json["flow_array"];
+
+                      function updateFlowChartDayData() {
+                        var newData = flowArray;
+
+                        // Update the chart's data
+                        flowChart.updateSeries([
+                          {
+                            data: newData,
+                          },
+                        ]);
+                      }
+
+                      function updateFlowChartWeekData(societyId, valueType) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        fetch(
+                          `http://localhost:5000/api/society/week/${societyId}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.flowrate.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            flowChart.updateSeries([
+                              {
+                                data: data.flowrate,
+                              },
+                            ]);
+
+                            flowChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "datetime",
+                                  categories: data.timestamps,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateFlowChartMonthData(
+                        societyId,
+                        year,
+                        month,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        month = month ? month : "9";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/month/${societyId}/${year}/${month}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            flowChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            flowChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "text",
+                                  categories: data.weeks,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateFlowChartYearData(
+                        societyId,
+                        year,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/year/${societyId}/${year}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            flowChart.updateSeries([
+                              {
+                                data: data.values,
+                              },
+                            ]);
+
+                            flowChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "number",
+                                  categories: data.months,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      var dayFlow = document.getElementById("flowDay");
+                      dayFlow.addEventListener("click", updateFlowChartDayData);
+
+                      var weekFlow = document.getElementById("flowWeek");
+                      weekFlow.addEventListener("click", () =>
+                        updateFlowChartWeekData("{{society_id}}", "flowrate")
+                      );
+
+                      var monthFlow = document.getElementById("flowMonth");
+                      monthFlow.addEventListener("click", () =>
+                        updateFlowChartMonthData(
+                          "{{society_id}}",
+                          2023,
+                          "9",
+                          "flowrate"
+                        )
+                      );
+
+                      var yearFlow = document.getElementById("flowYear");
+                      yearFlow.addEventListener("click", () =>
+                        updateFlowChartYearData(
+                          "{{society_id}}",
+                          2023,
+                          "flowrate"
+                        )
+                      );
+
+                      document.addEventListener("DOMContentLoaded", () => {
+                        flowChart = new ApexCharts(
+                          document.querySelector("#flowChart"),
+                          {
+                            series: [
+                              {
+                                name: "Flow Rate",
+                                data: flowArray,
+                              },
+                            ],
+                            chart: {
+                              height: 200,
+                              type: "area",
+                              toolbar: {
+                                show: true,
+                              },
+                            },
+                            markers: {
+                              size: 4,
+                            },
+                            colors: ["#2eca6a", "#ff771d"],
+                            fill: {
+                              type: "gradient",
+                              gradient: {
+                                shadeIntensity: 1,
+                                opacityFrom: 0.3,
+                                opacityTo: 0.4,
+                                stops: [0, 90, 100],
+                              },
+                            },
+                            dataLabels: {
+                              enabled: false,
+                            },
+                            stroke: {
+                              curve: "smooth",
+                              width: 2,
+                            },
+                            xaxis: {
+                              type: "string",
+                              categories: timestampArray,
+                            },
+                          }
+                        );
+
+                        flowChart.render();
+                      });
+                    </script>
+
+                    <!-- End Line Chart -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="card">
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown">
+                      <i class="bi bi-three-dots"></i>
+                    </a>
+                    <ul
+                      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"
+                    >
+                      <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                      </li>
+
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="tdsDay"
+                          >Today</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="tdsWeek"
+                          >Last 7 Days</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="tdsMonth"
+                          >This Month</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          id="tdsYear"
+                          >This Year</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="card-body">
+                    <h5 class="card-title">TDS Value <span>/ Today</span></h5>
+
+                    <!-- Line Chart -->
+                    <div id="tdsChart"></div>
+
+                    <script>
+                      var tdsChart = null;
+                      const tdsArray = realtime_json["tds_array"];
+
+                      function updateTDSChartDayData() {
+                        // Update the chart's data
+                        tdsChart.updateSeries([
+                          {
+                            data: tdsArray,
+                          },
+                        ]);
+                      }
+
+                      function updateTDSChartWeekData(societyId, valueType) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        fetch(
+                          `http://localhost:5000/api/society/week/${societyId}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            if (data.tdsvalue.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            console.log(data);
+                            // Update the chart's data
+                            tdsChart.updateSeries([
+                              {
+                                data: data.tdsvalue, // Use the correct key for TDS data
+                              },
+                            ]);
+
+                            tdsChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "datetime",
+                                  categories: data.timestamps,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateTDSChartMonthData(
+                        societyId,
+                        year,
+                        month,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        month = month ? month : "9";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/month/${societyId}/${year}/${month}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            tdsChart.updateSeries([
+                              {
+                                data: data.values, // Use the correct key for TDS data
+                              },
+                            ]);
+
+                            tdsChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "text",
+                                  categories: data.weeks,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      function updateTDSChartYearData(
+                        societyId,
+                        year,
+                        valueType
+                      ) {
+                        societyId = societyId ? societyId : "{{society_id}}";
+                        year = year ? year : "2023";
+                        fetch(
+                          `http://localhost:5000/api/year/${societyId}/${year}/${valueType}`
+                        )
+                          .then((response) => response.json())
+                          .then((data) => {
+                            console.log(data);
+                            if (data.values.length == 0) {
+                              alert("No data found");
+                              console.log("No data found");
+                              return;
+                            }
+                            // Update the chart's data
+                            tdsChart.updateSeries([
+                              {
+                                data: data.values, // Use the correct key for TDS data
+                              },
+                            ]);
+
+                            tdsChart
+                              .updateOptions({
+                                xaxis: {
+                                  type: "number",
+                                  categories: data.months,
+                                },
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                              });
+                          });
+                      }
+
+                      var tdsDay = document.getElementById("tdsDay");
+                      tdsDay.addEventListener("click", updateTDSChartDayData);
+
+                      var tdsWeek = document.getElementById("tdsWeek");
+                      tdsWeek.addEventListener("click", () =>
+                        updateTDSChartWeekData("{{society_id}}", "tdsvalue")
+                      );
+
+                      var tdsMonth = document.getElementById("tdsMonth");
+                      tdsMonth.addEventListener("click", () =>
+                        updateTDSChartMonthData(
+                          "{{society_id}}",
+                          2023,
+                          "9",
+                          "tdsvalue"
+                        )
+                      );
+
+                      var tdsYear = document.getElementById("tdsYear");
+                      tdsYear.addEventListener("click", () =>
+                        updateTDSChartYearData(
+                          "{{society_id}}",
+                          2023,
+                          "tdsvalue"
+                        )
+                      );
+
+                      document.addEventListener("DOMContentLoaded", () => {
+                        tdsChart = new ApexCharts(
+                          document.querySelector("#tdsChart"),
+                          {
+                            series: [
+                              {
+                                name: "TDS Value",
+                                data: tdsArray, // Sample data, replace with actual data
+                              },
+                            ],
+                            chart: {
+                              height: 200,
+                              type: "area",
+                              toolbar: {
+                                show: true,
+                              },
+                            },
+                            markers: {
+                              size: 4,
+                            },
+                            colors: ["#2eca6a", "#ff771d"],
+                            fill: {
+                              type: "gradient",
+                              gradient: {
+                                shadeIntensity: 1,
+                                opacityFrom: 0.3,
+                                opacityTo: 0.4,
+                                stops: [0, 90, 100],
+                              },
+                            },
+                            dataLabels: {
+                              enabled: false,
+                            },
+                            stroke: {
+                              curve: "smooth",
+                              width: 2,
+                            },
+                            xaxis: {
+                              type: "string",
+                              categories: timestampArray,
+                            },
+                          }
+                        );
+
+                        tdsChart.render();
+                      });
+                    </script>
+
+                    <!-- End Line Chart -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- End Reports -->
+
+              <!-- Recent Sales -->
+              <!-- End Recent Sales -->
+
+              <!-- Top Selling -->
+              <!-- End Top Selling -->
+            </div>
+          </div>
+          <!-- End Left side columns -->
+
+          <!-- Right side columns -->
+          <div class="col-lg-4">
+            <!-- Recent Activity -->
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Recent Complaints</h5>
+
+                <div class="activity">
+                  {% for complaint in complaints %}
+                  <div class="activity-item d-flex">
+                    <div class="activite-label">{{complaint.diff}}</div>
+                    <i
+                      class="bi bi-circle-fill activity-badge text-success align-self-start"
+                    ></i>
+                    <div class="activity-content">{{complaint.complaint}}</div>
+                  </div>
+                  {% endfor %}
+                  <!-- End activity item-->
+                </div>
+              </div>
+            </div>
+            <!-- End Recent Activity -->
+
+            <!-- Budget Report -->
+            <div class="card">
+              <div class="card-body pb-0">
+                <h5 class="card-title">Quality Report</h5>
+
+                <div
+                  id="budgetChart"
+                  style="min-height: 400px"
+                  class="echart"
+                ></div>
+
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    var budgetChart = echarts
+                      .init(document.querySelector("#budgetChart"))
+                      .setOption({
+                        legend: {
+                          data: ["Max Value", "Actual Value", "Min Value"],
+                        },
+                        radar: {
+                          // shape: 'circle',
+                          indicator: [
+                            {
+                              name: "PH",
+                              max: 8.5,
+                            },
+                            {
+                              name: "Turb",
+                              max: 5,
+                            },
+                            {
+                              name: "Temperature",
+                              max: 35,
+                            },
+                            {
+                              name: "EC",
+                              max: 400,
+                            },
+                            {
+                              name: "TDS",
+                              max: 300,
+                            },
+                          ],
+                        },
+                        series: [
+                          {
+                            name: "Budget vs spending",
+                            type: "radar",
+                            data: [
+                              {
+                                value: [8.5, 5, 35, 400, 300],
+                                name: "Max Value",
+                              },
+                              {
+                                value: [
+                                  phArray[phArray.length - 1],
+                                  turbidityArray[turbidityArray.length - 1],
+                                  temperatureArray[temperatureArray.length - 1],
+                                  ecArray[ecArray.length - 1],
+                                  tdsArray[tdsArray.length - 1],
+                                ],
+                                name: "Actual Value",
+                              },
+                              {
+                                value: [6.5, 1, 10, 50, 50],
+                                name: "Min Value",
+                              },
+                            ],
+                          },
+                        ],
+                      });
+                  });
+                </script>
+              </div>
+            </div>
+            <!-- End Budget Report -->
+            <!-- Credit: Shree Samal, Kaushal Poojary, Shaun D'souza -->
+
+            <!-- Website Traffic -->
+            <div class="card">
+              <div class="card-body pb-0">
+                <h5 class="card-title">Quality <span>| Current</span></h5>
+
+                <div
+                  id="trafficChart"
+                  style="min-height: 400px"
+                  class="echart"
+                ></div>
+
+                <script>
+                  function calculateRating(
+                    ph,
+                    temperature,
+                    tds,
+                    ec,
+                    turbidity
+                  ) {
+                    // Define the recommended limits for each parameter
+                    const recommendedLimits = {
+                      ph: { min: 6.5, max: 8.5 },
+                      temperature: { min: 10, max: 35 },
+                      tds: { min: 50, max: 300 },
+                      ec: { min: 50, max: 400 },
+                      turbidity: { min: 1, max: 5 },
+                    };
+
+                    console.log(
+                      "quality report",
+                      ph,
+                      temperature,
+                      tds,
+                      ec,
+                      turbidity
+                    );
+
+                    // Check how many parameters are within recommended limits
+                    let count = 0;
+                    // Check each parameter against its recommended limits
+                    if (
+                      ph >= recommendedLimits.ph.min &&
+                      ph <= recommendedLimits.ph.max
+                    ) {
+                      count++;
+                    }
+                    if (
+                      temperature >= recommendedLimits.temperature.min &&
+                      temperature <= recommendedLimits.temperature.max
+                    ) {
+                      count++;
+                    }
+                    if (
+                      tds >= recommendedLimits.tds.min &&
+                      tds <= recommendedLimits.tds.max
+                    ) {
+                      count++;
+                    }
+                    if (
+                      ec >= recommendedLimits.ec.min &&
+                      ec <= recommendedLimits.ec.max
+                    ) {
+                      count++;
+                    }
+                    if (
+                      turbidity >= recommendedLimits.turbidity.min &&
+                      turbidity <= recommendedLimits.turbidity.max
+                    ) {
+                      count++;
+                    }
+                    console.log("count", count);
+
+                    // Determine the rating based on the count
+                    let rating = "";
+                    if (count === 5) {
+                      rating = "Excellent";
+                    } else if (count === 4) {
+                      rating = "Good";
+                    } else if (count === 3) {
+                      rating = "Average";
+                    } else if (count === 2) {
+                      rating = "Poor";
+                    } else {
+                      rating = "Very Poor";
+                    }
+
+                    return rating;
+                  }
+
+                  document.addEventListener("DOMContentLoaded", () => {
+                    // Call the function with sample values
+
+                    const rating = calculateRating(
+                      phArray[phArray.length - 1],
+                      temperatureArray[temperatureArray.length - 1],
+                      tdsArray[tdsArray.length - 1],
+                      ecArray[ecArray.length - 1],
+                      turbidityArray[turbidityArray.length - 1]
+                    );
+                    console.log(rating);
+
+                    // Update the pie chart
+                    const chart = echarts
+                      .init(document.querySelector("#trafficChart"))
+                      .setOption({
+                        tooltip: {
+                          trigger: "item",
+                        },
+                        legend: {
+                          top: "5%",
+                          left: "center",
+                        },
+                        series: [
+                          {
+                            name: "Access From",
+                            type: "pie",
+                            radius: ["40%", "70%"],
+                            avoidLabelOverlap: false,
+                            label: {
+                              show: false,
+                              position: "center",
+                            },
+                            emphasis: {
+                              label: {
+                                show: true,
+                                fontSize: "18",
+                                fontWeight: "bold",
+                              },
+                            },
+                            labelLine: {
+                              show: false,
+                            },
+                            data: [
+                              {
+                                value: rating === "Excellent" ? 1048 : 0,
+                                name: "Excellent",
+                              },
+                              {
+                                value: rating === "Good" ? 1048 : 0,
+                                name: "Good",
+                              },
+                              {
+                                value: rating === "Average" ? 1048 : 0,
+                                name: "Average",
+                              },
+                              {
+                                value: rating === "Poor" ? 1048 : 0,
+                                name: "Poor",
+                              },
+                              {
+                                value: rating === "Very Poor" ? 1048 : 0,
+                                name: "Very Poor",
+                              },
+                            ],
+                          },
+                        ],
+                      });
+
+                    console.log(chart);
+                  });
+                </script>
+              </div>
+            </div>
+            <!-- End Website Traffic -->
+
+            <!-- News & Updates Traffic -->
+            <!-- End News & Updates -->
+          </div>
+          <!-- End Right side columns -->
+        </div>
+      </section>
+    </main>
+    <!-- End #main -->
+
+    <!-- Vendor JS Files -->
+    <script src="/static/assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="/static/assets/vendor/echarts/echarts.min.js"></script>
+    <script src="/static/assets/vendor/quill/quill.min.js"></script>
+    <script src="/static/assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="/static/assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="/static/assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="/static/assets/js/main.js"></script>
+  </body>
+</html>
